@@ -119,7 +119,6 @@ set(CMAKE_MODULE_LINKER_FLAGS
 
 # dependencies
 
-find_package(Boost REQUIRED)
 find_package(Sanitizers)
 
 
