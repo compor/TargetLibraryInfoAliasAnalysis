@@ -1,0 +1,27 @@
+digraph G {
+  VR [style=dotted color=gray fontcolor=gray]
+
+  // SCC clusters
+  subgraph cluster_vr { label="Virtual Root" style="dotted" color=gray fontcolor=gray VR}
+
+  subgraph cluster_scc0 { label="SCC0" 2 -> 1 -> 0 -> 2;}
+  subgraph cluster_scc1 { label="SCC1" 4 -> 3 -> 4;}
+  subgraph cluster_scc2 { label="SCC2" 5;}
+
+  // inter SCC edges
+  5 -> 0;
+  5 -> 1;
+
+  3 -> 2;
+
+  5 -> 3;
+  5 -> 4;
+
+  // VR inter SCC edges
+  0 -> VR [style="dotted" color=gray]
+  1 -> VR [style="dotted" color=gray]
+  2 -> VR [style="dotted" color=gray]
+  3 -> VR [style="dotted" color=gray]
+  4 -> VR [style="dotted" color=gray]
+  5 -> VR [style="dotted" color=gray]
+}

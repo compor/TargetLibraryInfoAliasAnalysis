@@ -1,0 +1,6 @@
+[submodule "cmake/cmake-utils"]
+	path = cmake/cmake-utils
+	url = https://github.com/compor/cmake-utils
+[submodule "cmake/sanitizers-cmake"]
+	path = cmake/sanitizers-cmake
+	url = https://github.com/arsenm/sanitizers-cmake
