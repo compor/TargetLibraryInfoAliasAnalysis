@@ -9,12 +9,19 @@
 #include "llvm/Analysis/AliasAnalysis.h"
 // using llvm::AAResultBase
 
+#include "llvm/Pass.h"
+// using llvm::ImmutablePass
+
 #include "llvm/ADT/BitVector.h"
 // using llvm::BitVector
 
+#include <memory>
+// using std::unique_ptr
+
 namespace llvm {
 class MemoryLocation;
-}
+class Module;
+} // namespace llvm
 
 namespace tliaa {
 
@@ -39,6 +46,32 @@ public:
                           const llvm::MemoryLocation &LocB);
 
   bool pointsToConstantMemory(const llvm::MemoryLocation &Loc, bool OrLocal);
+};
+
+// Legacy wrapper pass to provide the TLIAAResult object.
+class TLIAAWrapperPass : public llvm::ImmutablePass {
+  std::unique_ptr<TLIAAResult> Result;
+
+public:
+  static char ID;
+
+  TLIAAWrapperPass() : llvm::ImmutablePass(ID) {}
+
+  TLIAAResult &getResult() { return *Result; }
+  const TLIAAResult &getResult() const { return *Result; }
+
+  void getAnalysisUsage(llvm::AnalysisUsage &AU) const override;
+
+  bool doInitialization(llvm::Module &M) override {
+    Result.reset(new TLIAAResult(
+        getAnalysis<llvm::TargetLibraryInfoWrapperPass>().getTLI()));
+    return false;
+  }
+
+  bool doFinalization(llvm::Module &M) override {
+    Result.reset();
+    return false;
+  }
 };
 
 } // namespace tliaa

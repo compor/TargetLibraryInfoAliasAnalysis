@@ -4,11 +4,20 @@
 
 #include "TargetLibraryInfoAliasAnalysis/TargetLibraryInfoAliasAnalysis.hpp"
 
+#include "TargetLibraryInfoAliasAnalysis/Util.hpp"
+
 #include "llvm/Analysis/AliasAnalysis.h"
 // using llvm::FunctionModRefBehavior
 
 #include "llvm/Analysis/TargetLibraryInfo.h"
 // using llvm::TargetLibraryInfo
+
+#include "llvm/IR/LegacyPassManager.h"
+// using llvm::PassManagerBase
+
+#include "llvm/Transforms/IPO/PassManagerBuilder.h"
+// using llvm::PassManagerBuilder
+// using llvm::RegisterStandardPasses
 
 #define DEBUG_TYPE "tli-aa"
 
@@ -208,4 +217,37 @@ bool TLIAAResult::pointsToConstantMemory(const llvm::MemoryLocation &Loc,
   return AAResultBase::pointsToConstantMemory(Loc, OrLocal);
 }
 
+//
+
+void TLIAAWrapperPass::getAnalysisUsage(llvm::AnalysisUsage &AU) const {
+  AU.addRequired<llvm::TargetLibraryInfoWrapperPass>();
+  AU.setPreservesAll();
+}
+
 } // namespace tliaa
+
+// plugin registration for opt
+
+char tliaa::TLIAAWrapperPass::ID = 0;
+static llvm::RegisterPass<tliaa::TLIAAWrapperPass>
+    X("tli-aa", PRJ_CMDLINE_DESC("iterator recognition pass"), false, false);
+
+// plugin registration for clang
+
+// the solution was at the bottom of the header file
+// 'llvm/Transforms/IPO/PassManagerBuilder.h'
+// create a static free-floating callback that uses the legacy pass manager to
+// add an instance of this pass and a static instance of the
+// RegisterStandardPasses class
+
+static void registerTLIAAWrapperPass(const llvm::PassManagerBuilder &Builder,
+                                     llvm::legacy::PassManagerBase &PM) {
+  PM.add(new tliaa::TLIAAWrapperPass());
+
+  return;
+}
+
+static llvm::RegisterStandardPasses
+    RegisterTLIAAWrapperPass(llvm::PassManagerBuilder::EP_EarlyAsPossible,
+                             registerTLIAAWrapperPass);
+
