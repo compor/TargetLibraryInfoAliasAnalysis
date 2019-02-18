@@ -11,6 +11,11 @@
 
 #include "llvm/Pass.h"
 // using llvm::ImmutablePass
+// using llvm::PreservedAnalyses
+// using llvm::FunctionAnalysisManager
+
+#include "llvm/IR/Function.h"
+// using llvm::Function
 
 #include "llvm/ADT/BitVector.h"
 // using llvm::BitVector
@@ -41,6 +46,11 @@ public:
   }
 
   TLIAAResult(TLIAAResult &&Other) : TLIAAResult(Other.TLI) {}
+
+  bool invalidate(llvm::Function &, const llvm::PreservedAnalyses &,
+                  llvm::FunctionAnalysisManager::Invalidator &) {
+    return false;
+  }
 
   llvm::AliasResult alias(const llvm::MemoryLocation &LocA,
                           const llvm::MemoryLocation &LocB);
