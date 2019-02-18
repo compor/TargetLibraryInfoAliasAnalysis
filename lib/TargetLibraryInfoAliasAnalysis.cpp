@@ -256,13 +256,6 @@ TLIAAResult::getModRefBehavior(const llvm::Function *Func) {
   return AAResultBase::getModRefBehavior(Func);
 }
 
-bool TLIAAResult::pointsToConstantMemory(const llvm::MemoryLocation &Loc,
-                                         bool OrLocal) {
-  LLVM_DEBUG(llvm::dbgs() << "called pointsToConstantMemory()\n";);
-
-  return AAResultBase::pointsToConstantMemory(Loc, OrLocal);
-}
-
 //
 
 void TLIAAWrapperPass::getAnalysisUsage(llvm::AnalysisUsage &AU) const {

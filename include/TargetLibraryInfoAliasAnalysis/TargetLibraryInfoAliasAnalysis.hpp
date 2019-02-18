@@ -68,8 +68,6 @@ public:
   llvm::FunctionModRefBehavior getModRefBehavior(llvm::ImmutableCallSite CS);
 
   llvm::FunctionModRefBehavior getModRefBehavior(const llvm::Function *Func);
-
-  bool pointsToConstantMemory(const llvm::MemoryLocation &Loc, bool OrLocal);
 };
 
 // Legacy wrapper pass to provide the TLIAAResult object.
