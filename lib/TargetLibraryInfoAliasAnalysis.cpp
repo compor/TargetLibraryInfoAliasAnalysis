@@ -224,11 +224,14 @@ void TLIAAResult::initializeMathFuncs() {
 llvm::AliasResult TLIAAResult::alias(const llvm::MemoryLocation &LocA,
                                      const llvm::MemoryLocation &LocB) {
   LLVM_DEBUG(llvm::dbgs() << "called alias()\n";);
+
   return AAResultBase::alias(LocA, LocB);
 }
 
 llvm::FunctionModRefBehavior
 TLIAAResult::getModRefBehavior(llvm::ImmutableCallSite CS) {
+  LLVM_DEBUG(llvm::dbgs() << "called getModRefBehavior() on callsite\n";);
+
   if (CS.isCall()) {
     if (auto *calledFunc = CS.getCalledFunction()) {
       if (isPureFunc(*calledFunc)) {
@@ -242,6 +245,8 @@ TLIAAResult::getModRefBehavior(llvm::ImmutableCallSite CS) {
 
 llvm::FunctionModRefBehavior
 TLIAAResult::getModRefBehavior(const llvm::Function *Func) {
+  LLVM_DEBUG(llvm::dbgs() << "called getModRefBehavior() on function\n";);
+
   assert(Func && "Pointer is null!");
 
   if (isPureFunc(*Func)) {
@@ -253,6 +258,8 @@ TLIAAResult::getModRefBehavior(const llvm::Function *Func) {
 
 bool TLIAAResult::pointsToConstantMemory(const llvm::MemoryLocation &Loc,
                                          bool OrLocal) {
+  LLVM_DEBUG(llvm::dbgs() << "called pointsToConstantMemory()\n";);
+
   return AAResultBase::pointsToConstantMemory(Loc, OrLocal);
 }
 
