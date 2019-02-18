@@ -271,7 +271,7 @@ char tliaa::TLIAAWrapperPass::ID = 0;
 
 static llvm::RegisterPass<tliaa::TLIAAWrapperPass>
     X("tli-aa", PRJ_CMDLINE_DESC("Target Library Info Alias Analysis results"),
-      false, false);
+      false, true);
 
 static llvm::ImmutablePass *createTLIAAWrapperPass() {
   return new tliaa::TLIAAWrapperPass();
