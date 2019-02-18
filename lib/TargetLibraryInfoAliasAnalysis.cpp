@@ -230,7 +230,8 @@ void TLIAAWrapperPass::getAnalysisUsage(llvm::AnalysisUsage &AU) const {
 
 char tliaa::TLIAAWrapperPass::ID = 0;
 static llvm::RegisterPass<tliaa::TLIAAWrapperPass>
-    X("tli-aa", PRJ_CMDLINE_DESC("iterator recognition pass"), false, false);
+    X("tli-aa", PRJ_CMDLINE_DESC("Target Library Info Alias Analysis results"),
+      false, false);
 
 // plugin registration for clang
 
