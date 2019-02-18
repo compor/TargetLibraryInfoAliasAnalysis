@@ -75,3 +75,23 @@ public:
 };
 
 } // namespace tliaa
+
+// TODO not sure if the new passmanager passes are required to be in the llvm
+// namespace if defined out of source tree
+namespace llvm {
+
+// Analysis pass providing a never-invalidated alias analysis result.
+class TLIAA : public AnalysisInfoMixin<TLIAA> {
+  friend AnalysisInfoMixin<TLIAA>;
+
+  static char PassID;
+
+public:
+  using Result = tliaa::TLIAAResult;
+
+  tliaa::TLIAAResult run(Function &F, AnalysisManager<Function> &AM) {
+    return tliaa::TLIAAResult(AM.getResult<TargetLibraryAnalysis>(F));
+  }
+};
+
+} // namespace llvm
