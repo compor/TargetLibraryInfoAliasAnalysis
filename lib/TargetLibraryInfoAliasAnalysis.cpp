@@ -8,6 +8,8 @@
 
 #include "llvm/Analysis/AliasAnalysis.h"
 // using llvm::FunctionModRefBehavior
+// using llvm::createExternalAAWrapperPass
+// using llvm::AAResults
 
 #include "llvm/Analysis/TargetLibraryInfo.h"
 // using llvm::TargetLibraryInfo
@@ -20,6 +22,10 @@
 // using llvm::RegisterStandardPasses
 
 #define DEBUG_TYPE "tli-aa"
+
+namespace llvm {
+class Function;
+}
 
 namespace tliaa {
 
@@ -229,9 +235,24 @@ void TLIAAWrapperPass::getAnalysisUsage(llvm::AnalysisUsage &AU) const {
 // plugin registration for opt
 
 char tliaa::TLIAAWrapperPass::ID = 0;
+
 static llvm::RegisterPass<tliaa::TLIAAWrapperPass>
     X("tli-aa", PRJ_CMDLINE_DESC("Target Library Info Alias Analysis results"),
       false, false);
+
+static llvm::ImmutablePass *createTLIAAWrapperPass() {
+  return new tliaa::TLIAAWrapperPass();
+}
+
+static llvm::ImmutablePass *createTLIAAExternalWrapperPass() {
+  return llvm::createExternalAAWrapperPass(
+      [](llvm::Pass &P, llvm::Function &F, llvm::AAResults &AAR) {
+        if (auto *WrapperPass =
+                P.getAnalysisIfAvailable<tliaa::TLIAAWrapperPass>()) {
+          AAR.addAAResult(WrapperPass->getResult());
+        }
+      });
+}
 
 // plugin registration for clang
 
@@ -243,7 +264,8 @@ static llvm::RegisterPass<tliaa::TLIAAWrapperPass>
 
 static void registerTLIAAWrapperPass(const llvm::PassManagerBuilder &Builder,
                                      llvm::legacy::PassManagerBase &PM) {
-  PM.add(new tliaa::TLIAAWrapperPass());
+  PM.add(createTLIAAWrapperPass());
+  PM.add(createTLIAAExternalWrapperPass());
 
   return;
 }
