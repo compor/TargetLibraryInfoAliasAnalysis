@@ -21,6 +21,10 @@
 // using llvm::PassManagerBuilder
 // using llvm::RegisterStandardPasses
 
+#include "llvm/Support/Debug.h"
+// using LLVM_DEBUG macro
+// using llvm::dbgs
+
 #define DEBUG_TYPE "tli-aa"
 
 namespace llvm {
@@ -30,6 +34,7 @@ class Function;
 namespace tliaa {
 
 void TLIAAResult::initialize() {
+  LLVM_DEBUG(llvm::dbgs() << "initializing TLIAA\n";);
   PureFuncs.reserve(llvm::NumLibFuncs);
   initializeMathFuncs();
 }
