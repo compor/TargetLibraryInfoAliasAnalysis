@@ -39,6 +39,15 @@ class TLIAAResult : public llvm::AAResultBase<TLIAAResult> {
   void initializeMathFuncs();
   void initialize();
 
+  bool isPureFunc(const llvm::Function &Func) const {
+    llvm::LibFunc libraryFunc;
+    if (TLI.getLibFunc(Func, libraryFunc)) {
+      return PureFuncs[libraryFunc];
+    }
+
+    return false;
+  }
+
 public:
   explicit TLIAAResult(const llvm::TargetLibraryInfo &TLI)
       : AAResultBase(), TLI(TLI) {
