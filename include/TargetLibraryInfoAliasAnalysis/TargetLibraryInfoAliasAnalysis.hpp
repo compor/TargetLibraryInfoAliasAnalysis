@@ -26,6 +26,7 @@
 namespace llvm {
 class MemoryLocation;
 class Module;
+class ImmutableCallSite;
 } // namespace llvm
 
 namespace tliaa {
@@ -63,6 +64,10 @@ public:
 
   llvm::AliasResult alias(const llvm::MemoryLocation &LocA,
                           const llvm::MemoryLocation &LocB);
+
+  llvm::FunctionModRefBehavior getModRefBehavior(llvm::ImmutableCallSite CS);
+
+  llvm::FunctionModRefBehavior getModRefBehavior(const llvm::Function *Func);
 
   bool pointsToConstantMemory(const llvm::MemoryLocation &Loc, bool OrLocal);
 };

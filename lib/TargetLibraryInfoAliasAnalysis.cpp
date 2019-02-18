@@ -14,6 +14,9 @@
 #include "llvm/Analysis/TargetLibraryInfo.h"
 // using llvm::TargetLibraryInfo
 
+#include "llvm/IR/Instructions.h"
+// using llvm::ImmutableCallSite
+
 #include "llvm/IR/LegacyPassManager.h"
 // using llvm::PassManagerBase
 
@@ -220,7 +223,32 @@ void TLIAAResult::initializeMathFuncs() {
 
 llvm::AliasResult TLIAAResult::alias(const llvm::MemoryLocation &LocA,
                                      const llvm::MemoryLocation &LocB) {
+  LLVM_DEBUG(llvm::dbgs() << "called alias()\n";);
   return AAResultBase::alias(LocA, LocB);
+}
+
+llvm::FunctionModRefBehavior
+TLIAAResult::getModRefBehavior(llvm::ImmutableCallSite CS) {
+  if (CS.isCall()) {
+    if (auto *calledFunc = CS.getCalledFunction()) {
+      if (isPureFunc(*calledFunc)) {
+        return llvm::FMRB_OnlyReadsArgumentPointees;
+      }
+    }
+  }
+
+  return AAResultBase::getModRefBehavior(CS);
+}
+
+llvm::FunctionModRefBehavior
+TLIAAResult::getModRefBehavior(const llvm::Function *Func) {
+  assert(Func && "Pointer is null!");
+
+  if (isPureFunc(*Func)) {
+    return llvm::FMRB_OnlyReadsArgumentPointees;
+  }
+
+  return AAResultBase::getModRefBehavior(Func);
 }
 
 bool TLIAAResult::pointsToConstantMemory(const llvm::MemoryLocation &Loc,
