@@ -234,6 +234,18 @@ void TLIAAResult::initializeMathFuncs() {
   PureFuncs.set(LibFunc_cabsl);
 }
 
+bool TLIAAResult::isPureFunc(const llvm::Function &Func) const {
+  llvm::LibFunc libraryFunc;
+
+  if (TLI.getLibFunc(Func, libraryFunc)) {
+    LLVM_DEBUG(llvm::dbgs() << "in " << __func__ << ": testing "
+                            << TLI.getName(libraryFunc) << '\n';);
+    return PureFuncs[libraryFunc];
+  }
+
+  return false;
+}
+
 llvm::AliasResult TLIAAResult::alias(const llvm::MemoryLocation &LocA,
                                      const llvm::MemoryLocation &LocB) {
   LLVM_DEBUG(llvm::dbgs() << "called alias()\n";);

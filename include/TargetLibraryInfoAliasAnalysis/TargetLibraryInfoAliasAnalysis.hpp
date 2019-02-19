@@ -25,13 +25,14 @@
 namespace llvm {
 class MemoryLocation;
 class Module;
+class Function;
 class ImmutableCallSite;
 } // namespace llvm
 
 namespace tliaa {
 
 class TLIAAResult : public llvm::AAResultBase<TLIAAResult> {
-  friend llvm::AAResultBase<TLIAAResult>;
+  friend AAResultBase<TLIAAResult>;
 
   const llvm::TargetLibraryInfo &TLI;
   llvm::BitVector PureFuncs;
@@ -39,14 +40,7 @@ class TLIAAResult : public llvm::AAResultBase<TLIAAResult> {
   void initializeMathFuncs();
   void initialize();
 
-  bool isPureFunc(const llvm::Function &Func) const {
-    llvm::LibFunc libraryFunc;
-    if (TLI.getLibFunc(Func, libraryFunc)) {
-      return PureFuncs[libraryFunc];
-    }
-
-    return false;
-  }
+  bool isPureFunc(const llvm::Function &Func) const;
 
 public:
   explicit TLIAAResult(const llvm::TargetLibraryInfo &TLI)
