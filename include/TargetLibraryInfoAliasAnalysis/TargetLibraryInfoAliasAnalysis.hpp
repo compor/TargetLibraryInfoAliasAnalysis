@@ -48,7 +48,9 @@ public:
     initialize();
   }
 
-  TLIAAResult(TLIAAResult &&Other) : TLIAAResult(Other.TLI) {}
+  TLIAAResult(TLIAAResult &&Other)
+      : AAResultBase(std::move(Other)), TLI(Other.TLI),
+        PureFuncs(Other.PureFuncs) {}
 
   bool invalidate(llvm::Function &, const llvm::PreservedAnalyses &,
                   llvm::FunctionAnalysisManager::Invalidator &) {
