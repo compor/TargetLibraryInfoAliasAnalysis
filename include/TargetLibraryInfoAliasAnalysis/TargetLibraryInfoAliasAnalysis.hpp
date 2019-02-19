@@ -12,10 +12,9 @@
 #include "llvm/Pass.h"
 // using llvm::ImmutablePass
 // using llvm::PreservedAnalyses
-// using llvm::FunctionAnalysisManager
 
-#include "llvm/IR/Function.h"
-// using llvm::Function
+#include "llvm/IR/PassManager.h"
+// using llvm::FunctionAnalysisManager
 
 #include "llvm/ADT/BitVector.h"
 // using llvm::BitVector

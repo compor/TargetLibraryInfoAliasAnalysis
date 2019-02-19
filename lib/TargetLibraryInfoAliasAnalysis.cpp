@@ -10,11 +10,12 @@
 // using llvm::FunctionModRefBehavior
 // using llvm::createExternalAAWrapperPass
 // using llvm::AAResults
+// using llvm::AAManager
 
 #include "llvm/Analysis/TargetLibraryInfo.h"
 // using llvm::TargetLibraryInfo
 
-#include "llvm/IR/Instructions.h"
+#include "llvm/IR/CallSite.h"
 // using llvm::ImmutableCallSite
 
 #include "llvm/IR/LegacyPassManager.h"
@@ -23,6 +24,18 @@
 #include "llvm/Transforms/IPO/PassManagerBuilder.h"
 // using llvm::PassManagerBuilder
 // using llvm::RegisterStandardPasses
+
+#include "llvm/IR/PassManager.h"
+// using llvm::FunctionAnalysisManager
+
+#include "llvm/Passes/PassBuilder.h"
+// using llvm::PassBuilder
+
+#include "llvm/Passes/PassPlugin.h"
+// using llvmGetPassPluginInfo
+
+#include "llvm/ADT/StringRef.h"
+// using llvm::StringRef
 
 #include "llvm/Support/Debug.h"
 // using LLVM_DEBUG macro
