@@ -125,6 +125,7 @@ find_package(Sanitizers)
 #
 
 set(LIB_SOURCES
+  "lib/AliasAnalysisTest.cpp"
   "lib/TargetLibraryInfoAliasAnalysis.cpp")
 
 set(LIB_NAME "LLVM${PRJ_NAME}Pass")
