@@ -50,8 +50,9 @@ class Function;
 namespace tliaa {
 
 void TLIAAResult::initialize() {
-  LLVM_DEBUG(llvm::dbgs() << "initializing TLIAA\n";);
-  PureFuncs.reserve(llvm::NumLibFuncs);
+  LLVM_DEBUG(llvm::dbgs() << "initializing TLIAA with " << llvm::NumLibFuncs
+                          << "bits\n";);
+  PureFuncs.resize(llvm::NumLibFuncs);
   initializeMathFuncs();
 }
 
