@@ -42,10 +42,7 @@
 // using llvm::dbgs
 
 #define DEBUG_TYPE "tli-aa"
-
-namespace llvm {
-class Function;
-}
+#define PASS_NAME DEBUG_TYPE
 
 namespace tliaa {
 
@@ -296,8 +293,8 @@ void TLIAAWrapperPass::getAnalysisUsage(llvm::AnalysisUsage &AU) const {
 char tliaa::TLIAAWrapperPass::ID = 0;
 
 static llvm::RegisterPass<tliaa::TLIAAWrapperPass>
-    X("tli-aa", PRJ_CMDLINE_DESC("Target Library Info Alias Analysis results"),
-      false, true);
+    X(PASS_NAME, PRJ_CMDLINE_DESC("Target Library Info Alias Analysis"), false,
+      true);
 
 static llvm::ImmutablePass *createTLIAAWrapperPass() {
   return new tliaa::TLIAAWrapperPass();
