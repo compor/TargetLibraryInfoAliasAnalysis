@@ -288,6 +288,43 @@ void TLIAAWrapperPass::getAnalysisUsage(llvm::AnalysisUsage &AU) const {
 
 } // namespace tliaa
 
+//
+
+llvm::AnalysisKey tliaa::TLIAA::Key;
+
+// plugin registration for opt new passmanager
+
+namespace {
+
+void registerCallback(llvm::PassBuilder &PB) {
+  PB.registerParseAACallback([](llvm::StringRef Name, llvm::AAManager &AAM) {
+    if (Name == PASS_NAME) {
+      LLVM_DEBUG(llvm::dbgs()
+                     << "registering alias analysis " << PASS_NAME << "\n";);
+
+      AAM.registerFunctionAnalysis<tliaa::TLIAA>();
+      return true;
+    }
+    return false;
+  });
+  PB.registerAnalysisRegistrationCallback(
+      [](llvm::FunctionAnalysisManager &FAM) {
+        LLVM_DEBUG(llvm::dbgs()
+                       << "registering analysis " << PASS_NAME << "\n";);
+
+        FAM.registerPass([] { return tliaa::TLIAA(); });
+        return true;
+      });
+}
+
+} // namespace
+
+extern "C" ::llvm::PassPluginLibraryInfo LLVM_ATTRIBUTE_WEAK
+llvmGetPassPluginInfo() {
+  return {LLVM_PLUGIN_API_VERSION, "TLIAAPlugin", STRINGIFY(VERSION_STRING),
+          registerCallback};
+}
+
 // plugin registration for opt
 
 char tliaa::TLIAAWrapperPass::ID = 0;
