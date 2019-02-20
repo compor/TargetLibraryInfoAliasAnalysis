@@ -244,13 +244,6 @@ bool TLIAAResult::isPureFunc(const llvm::Function &Func) const {
   return false;
 }
 
-llvm::AliasResult TLIAAResult::alias(const llvm::MemoryLocation &LocA,
-                                     const llvm::MemoryLocation &LocB) {
-  LLVM_DEBUG(llvm::dbgs() << "called alias()\n";);
-
-  return AAResultBase::alias(LocA, LocB);
-}
-
 llvm::FunctionModRefBehavior
 TLIAAResult::getModRefBehavior(llvm::ImmutableCallSite CS) {
   LLVM_DEBUG(llvm::dbgs() << "called getModRefBehavior() on callsite\n";);

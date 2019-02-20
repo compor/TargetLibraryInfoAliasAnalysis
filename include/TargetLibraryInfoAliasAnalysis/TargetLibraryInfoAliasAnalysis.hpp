@@ -57,9 +57,6 @@ public:
     return false;
   }
 
-  llvm::AliasResult alias(const llvm::MemoryLocation &LocA,
-                          const llvm::MemoryLocation &LocB);
-
   llvm::FunctionModRefBehavior getModRefBehavior(llvm::ImmutableCallSite CS);
 
   llvm::FunctionModRefBehavior getModRefBehavior(const llvm::Function *Func);
