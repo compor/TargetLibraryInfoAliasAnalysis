@@ -289,7 +289,7 @@ llvm::AnalysisKey tliaa::TLIAA::Key;
 
 namespace {
 
-void registerCallback(llvm::PassBuilder &PB) {
+void registerCallbacks(llvm::PassBuilder &PB) {
   PB.registerParseAACallback([](llvm::StringRef Name, llvm::AAManager &AAM) {
     if (Name == PASS_NAME) {
       LLVM_DEBUG(llvm::dbgs()
@@ -315,7 +315,7 @@ void registerCallback(llvm::PassBuilder &PB) {
 extern "C" ::llvm::PassPluginLibraryInfo LLVM_ATTRIBUTE_WEAK
 llvmGetPassPluginInfo() {
   return {LLVM_PLUGIN_API_VERSION, "TLIAAPlugin", STRINGIFY(VERSION_STRING),
-          registerCallback};
+          registerCallbacks};
 }
 
 // plugin registration for opt
