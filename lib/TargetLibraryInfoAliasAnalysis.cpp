@@ -47,8 +47,8 @@
 namespace tliaa {
 
 void TLIAAResult::initialize() {
-  LLVM_DEBUG(llvm::dbgs() << "initializing TLIAA with " << llvm::NumLibFuncs
-                          << "bits\n";);
+  LLVM_DEBUG(llvm::dbgs() << "initializing TLIAA for " << llvm::NumLibFuncs
+                          << " library functions\n";);
   PureFuncs.resize(llvm::NumLibFuncs);
   initializeMathFuncs();
 }
