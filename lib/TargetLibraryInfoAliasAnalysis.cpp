@@ -56,6 +56,11 @@ void TLIAAResult::initialize() {
 void TLIAAResult::initializeMathFuncs() {
   using namespace llvm;
 
+  // TODO it would be safer (although not completely safe due to visibility
+  // issues in external libraries) to convert this pass to a module pass in
+  // order to gain more visibility over potential use of global state mutation
+  // via errno or math_errhandling
+
   PureFuncs.set(LibFunc_sincospi_stret);
   PureFuncs.set(LibFunc_sincospif_stret);
   PureFuncs.set(LibFunc_acos);
